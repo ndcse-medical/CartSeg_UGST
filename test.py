@@ -58,7 +58,7 @@ test_stack = cnf["TEST"]["test_stack"]
 iter_num = cnf["TEST"]["iter_num"]
 result_temp_dir = cnf["TEST"]["result_temp_dir"]
 threshold = cnf["TEST"]["threshold"]
-
+results_id = cnf["TEST"]['results_id']
 
 imageType = 1
 ous = 512 #640
@@ -425,9 +425,10 @@ def convert_():
     newshape = (1.0 * np.array([z, h, w])).astype(int)
     newshape = tuple(newshape)
 
-    d_a0 = f'iter{iter_num}_D0_c1_{test_stack}'
-    d_a1 = f'iter{iter_num}_D1_c1_{test_stack}'
-    d_a2 = f'iter{iter_num}_D2_c1_{test_stack}'
+
+    d_a0 = f'id_{results_id}_dt_{dt}_iter{iter_num}_D0_c1_{test_stack}'
+    d_a1 = f'id_{results_id}_dt_{dt}_iter{iter_num}_D1_c1_{test_stack}'
+    d_a2 = f'id_{results_id}_dt_{dt}_iter{iter_num}_D2_c1_{test_stack}'
 
     for idx in range(z):
       flnm = test_stack + '_{:04}.png'.format(idx)
@@ -435,7 +436,7 @@ def convert_():
       I_fuse[idx,:,:] = np.maximum(skimage.img_as_float(imread(os.path.join(result_temp_dir,d_a0,flnm))), skimage.img_as_float(imread(os.path.join(result_temp_dir,d_a1,flnm))) , skimage.img_as_float(imread(os.path.join(result_temp_dir,d_a2,flnm))))
       #I_fuse[idx,:,:] = skimage.img_as_float(imread(os.path.join(result_temp_dir,d_a0,flnm))) + skimage.img_as_float(imread(os.path.join(result_temp_dir,d_a1,flnm))) + skimage.img_as_float(imread(os.path.join(result_temp_dir,d_a2,flnm)))
 
-    img_save_dir = f'{result_temp_dir}/{dt}/iter{iter_num}_{test_stack}'
+    img_save_dir = f'{result_temp_dir}/id_{results_id}_dt_{dt}_iter{iter_num}_{test_stack}'
 
     if not os.path.isdir(img_save_dir):
       os.makedirs(img_save_dir)
@@ -449,8 +450,9 @@ def convert_():
 
 def remove_connected_components():
   di = os.path.join(imgdir, test_stack)
-  #combined_res_dir = f'{result_temp_dir}/{dt}/iter{iter_num}_{test_stack}'
-  combined_res_dir = di
+  # combined_res_dir = f'{result_temp_dir}/id_{results_id}_dt_{dt}_iter{iter_num}_{test_stack}'
+  combined_res_dir = f'ACH-Results-phase1-sept2021/ACH-E14.5/{test_stack}'
+
 
   print('--'*35)
   print('Removing connected components for: ', test_stack)
@@ -489,7 +491,7 @@ def remove_connected_components():
   label_img[label_img>0] = 1
 
   #img_save_dir = os.path.join(resultdir,'iter{}_'.format(Iter*500)+ test_stack)
-  output_dir = f'{resultdir}/{test_stack[0:4]}/iter{iter_num}_ts_{dt}_stack_{test_stack}'
+  output_dir = f'{resultdir}/{test_stack[0:4]}_id_{results_id}/id_{results_id}_dt_{dt}_iter{iter_num}_stack_{test_stack}'
   if not os.path.isdir(output_dir):
     os.makedirs(output_dir)
   print("--"*35)
@@ -598,7 +600,7 @@ def main(_):
           pmap_img[:,:] = pmap[z,:,:,k]*255
           #print(pmap_img.max())
           #print(pmap_img.min())
-          img_save_dir = result_temp_dir + '/iter' + str(iter_num) + '_D' + str(0) + '_c' + str(k+1) + '_' + cur_dir
+          img_save_dir = f'{result_temp_dir}/id_{results_id}_dt_{dt}_iter{iter_num}_D0_c{k+1}_{cur_dir}'
           if not os.path.isdir(img_save_dir):
             os.makedirs(img_save_dir)
           imsave(os.path.join(img_save_dir, '{}_{:04}.png'.format(cur_dir, z)), pmap_img)
@@ -619,7 +621,7 @@ def main(_):
           pmap_img[:,:] = pmap[z,:,:,k]*255
           #print(pmap_img.max())
           #print(pmap_img.min())
-          img_save_dir = result_temp_dir + '/iter' + str(iter_num) + '_D' + str(1) + '_c' + str(k+1) + '_' + cur_dir
+          img_save_dir = f'{result_temp_dir}/id_{results_id}_dt_{dt}_iter{iter_num}_D1_c{k+1}_{cur_dir}'
           if not os.path.isdir(img_save_dir):
             os.makedirs(img_save_dir)
           imsave(os.path.join(img_save_dir, '{}_{:04}.png'.format(cur_dir, z)), pmap_img)
@@ -641,7 +643,8 @@ def main(_):
               pmap_img[:,:] = pmap[z,:,:,k]*255
               #print(pmap_img.max())
               #print(pmap_img.min())
-              img_save_dir = result_temp_dir + '/iter' + str(iter_num) + '_D' + str(2) + '_c' + str(k+1) + '_' + cur_dir
+              #img_save_dir = result_temp_dir + '/iter' + str(iter_num) + '_D' + str(2) + '_c' + str(k+1) + '_' + cur_dir
+              img_save_dir = f'{result_temp_dir}/id_{results_id}_dt_{dt}_iter{iter_num}_D2_c{k+1}_{cur_dir}'
               if not os.path.isdir(img_save_dir):
                 os.makedirs(img_save_dir)
               imsave(os.path.join(img_save_dir, '{}_{:04}.png'.format(cur_dir, z)), pmap_img)

@@ -48,6 +48,9 @@ iter_num = cnf["TRAIN"]["iter_num"]
 pretrained_model = cnf["TRAIN"]["pretrained_model"]
 age_group = cnf["TRAIN"]["age_group"]
 notes = cnf["TRAIN"]["notes"]
+model_id  = cnf["TRAIN"]["model_id"]
+
+
 
 imageType = 1
 ous = 512 #640
@@ -147,6 +150,8 @@ def load_data(file_dir):
   # saving txt file with training stacks and model infos:
   f = open(f'{modeldir}/{age_group}_{dt}/info.txt', "w")
   f.write(notes+"\n")
+  f.write(f'trainin date and time: {dt}'+"\n")
+  f.write(f'Base model: {pretrained_model}'+'\n')
   f.write("Training stacks:"+"\n")
   for stack in train_stacks:
     f.write(stack)
@@ -235,7 +240,6 @@ def bn_(x,phase):
                                             gamma_initializer = tf.random_uniform_initializer(minval=0.0, maxval=1.0,dtype=tf.float32),
                                             training = phase)
   return bn_result
-
 def relu_(x):
   return tf.nn.relu(x)
 
@@ -544,7 +548,7 @@ def main(_):
     #if (i==5000) or ((i > 10000-1) and (i%10000 == 0)):
     if (i%5000 == 0) or i == iter_num:                    # change to 5000
       # checkpoint_name = os.path.join(modeldir, str(i) + '.ckpt')
-      checkpoint_name = f'{modeldir}/{age_group}_{dt}/{i}.ckpt'
+      checkpoint_name = f'{modeldir}/{model_id}_{age_group}_{dt}/{i}.ckpt'
       print('Saving model at: ' + checkpoint_name)
       saver.save(sess,checkpoint_name)
 

@@ -6,20 +6,24 @@ PREPROCESS:
   mask_destination : 'img/train/ACH/mask/E145_000'
 
 TRAIN:
-  imgdir : 'img/train/ACH/E165'
+  age_group : 'E145'
+  imgdir : 'img/train/ACH/E145_only'
   modeldir : 'models'
-  pretrained_model : 'models/E165_M02042022/10000.ckpt'
+  pretrained_model : 'models/E145_09032021_fromHao/20000.ckpt'
   logdir : 'logs'
   batch_size : 8
-  iter_num : 10000
+  iter_num : 20000
+  notes : 'CZEM 14.5 fine tuned on ACH 14.5'
+  model_id : 'C145-ft-ACH145s0507'
 
 TEST:
-  imgdir : 'img/test/ACH'
+  imgdir : 'ACH-Results-phase1-sept2021/ACH-E14.5'
   logdir : 'logs'
   resultdir : 'results'
-  result_temp_dir : 'intermediate'
-  test_stack : 'E165_012'
-  trained_model :  'models/E145_M02272022/20000.ckpt' #'models/E145_M01072022/20000.ckpt' 
+  result_temp_dir : 'ACH-Results-phase1-sept2021/ACH-E14.5'
+  test_stack : 'E145_012'
+  trained_model :  'models/C145-ft-ACH145s0507-ACH165s02_E145_2022-03-08-0531/20000.ckpt' #'models/E145_M01072022/20000.ckpt' 
   iter_num : 20000
   batch_size : 8
   threshold : 100
+  results_id : 'old_results'
