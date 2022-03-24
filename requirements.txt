@@ -1,6 +1,5 @@
-cude toolkit=10.0
-cudnn=7.6.5
 opencv-python
 scikit-image
+imagecodecs
 pyyaml
 
